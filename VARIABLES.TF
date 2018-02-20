@@ -10,6 +10,14 @@ variable "Ami" {
 		"us-west-2" = "ami-f2d3638a"
   }
 }
+variable "aws_access_key" {
+  default = ""
+  description = "the user aws access key"
+}
+variable "aws_secret_key" {
+  default = ""
+  description = "the user aws secret key"
+}
 variable "vpc_cidr" {
     default = "10.0.0.0/16"
   description = "the vpc cdir"
