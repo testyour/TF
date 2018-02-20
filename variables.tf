@@ -11,11 +11,11 @@ variable "Ami" {
   }
 }
 variable "aws_access_key" {
-  default = "AKIAJ4UHWL7J3HXAGEGA"
+  default = ""
   description = "the user aws access key"
 }
 variable "aws_secret_key" {
-  default = "wpYsUZ40OsnicE8wCSgIwtD0x1DuNiKP9hG+J8S8"
+  default = "+J8S8"
   description = "the user aws secret key"
 }
 variable "vpc_cidr" {
