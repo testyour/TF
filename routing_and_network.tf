@@ -9,6 +9,76 @@ resource "aws_internet_gateway" "gw" {
     }
 }
 
+resource "aws_network_acl" "Public" {
+   vpc_id = "${aws_vpc.terraformmain.id}"
+   egress {
+       protocol = "6"
+       rule_no = "100"
+       action = "allow"
+       cidr_block =  "0.0.0.0/0"
+       from_port = "0"
+       to_port = "65535"
+    }
+    ingress {
+        protocol = "6"
+        rule_no = "100"
+        action = "allow"
+        cidr_block =  "0.0.0.0/0"
+        from_port = "80"
+        to_port = "80"
+    }
+    ingress {
+        protocol = "6"
+        rule_no = "101"
+        action = "allow"
+        cidr_block =  "0.0.0.0/0"
+        from_port = "443"
+        to_port = "443"
+    }
+    ingress {
+        protocol = "6"
+        rule_no = "102"
+        action = "allow"
+        cidr_block =  "0.0.0.0/0"
+        from_port = "22"
+        to_port = "22"
+    }
+    ingress {
+        protocol = "6"
+        rule_no = "103"
+        action = "allow"
+        cidr_block =  "0.0.0.0/0"
+        from_port = "1024"
+        to_port = "65535"
+    }
+    tags {
+        Name = "open acl"
+    }
+}
+
+resource "aws_network_acl" "Private" {
+   vpc_id = "${aws_vpc.terraformmain.id}"
+   egress {
+        protocol = "6"
+        rule_no = "100"
+        action = "allow"
+        cidr_block =  "0.0.0.0/0"
+        from_port = "0"
+        to_port = "65535"
+    }
+    ingress {
+        protocol = "6"
+        rule_no = "100"
+        action = "allow"
+        cidr_block =  "0.0.0.0/0"
+        from_port = "80"
+        to_port = "80"
+    }
+    tags {
+        Name = "open acl"
+    }
+}
+
 resource "aws_route_table" "public" {
   vpc_id = "${aws_vpc.terraformmain.id}"
   tags {
