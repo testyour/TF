@@ -1,16 +1,16 @@
 resource "aws_security_group" "NATSecurityGroup" {
   name = "NATSecurityGroup"
   tags {
-        Name = "NATSecurityGroup"
+    Name = "NATSecurityGroup"
   }
   description = "Enable internal access to the NAT device"
   vpc_id = "${aws_vpc.terraformmain.id}"
 
   ingress {
-        from_port = "80"
-        to_port = "80"
-        protocol = "TCP"
-        cidr_blocks = ["0.0.0.0/0"]
+    from_port = "80"
+    to_port = "80"
+    protocol = "TCP"
+    cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
     from_port   = "443"
@@ -45,11 +45,17 @@ resource "aws_security_group" "BastionSecurityGroup" {
   }
   description = "Enable access to the bastion host"
   vpc_id = "${aws_vpc.terraformmain.id}"
+  egress {
+    from_port = "0"
+    to_port = "65535"
+    protocol = "TCP"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
   ingress {
-      from_port = "22"
-      to_port = "22"
-      protocol = "TCP"
-      cidr_blocks = ["0.0.0.0/0"]
+    from_port = "22"
+    to_port = "22"
+    protocol = "TCP"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
@@ -60,10 +66,38 @@ resource "aws_security_group" "InternalSshSecurityGroup" {
   }
   description = "Allow ssh access from bastion"
   vpc_id = "${aws_vpc.terraformmain.id}"
+  egress {
+    from_port = "0"
+    to_port = "65535"
+    protocol = "TCP"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
   ingress {
       from_port = "22"
       to_port = "22"
       protocol = "TCP"
       security_groups = ["${aws_security_group.BastionSecurityGroup.id}"]
+  }
+
+}
+
+## Security Group for ELB
+resource "aws_security_group" "elb" {
+  name = "terraform-elbsg"
+  tags {
+        Name = "ELBSecurityGroup"
+  }
+  vpc_id = "${aws_vpc.terraformmain.id}"
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
